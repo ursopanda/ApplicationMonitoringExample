@@ -215,3 +215,9 @@ pip-log.txt
 .mr.developer.cfg
 
 src/main/java/com/
+src/main/resources/META-INF/spring
+src/main/webapp/WEB-INF/DefaultMonitoringNotifier.xml
+src/main/webapp/WEB-INF/epb-security-beans.xml
+src/main/webapp/WEB-INF/
+target/classes/com
+target/classes/META-INF/spring
