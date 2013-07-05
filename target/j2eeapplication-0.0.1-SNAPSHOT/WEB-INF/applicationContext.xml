@@ -1,0 +1,48 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+    http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
+	   
+
+	<!-- All Beans configurations, that will be used, will be puted right here! -->
+
+	<import resource="datasource-config.xml" />
+	<import resource="webflow-config.xml" />
+	<import resource="epb-security-beans.xml" />
+
+	<!-- userBean is created - bean, wich will wire with RegistrationDTO. Will 
+		be created once per session -->
+
+	<bean id="userBean" class="dto.RegistrationDTO" scope="session">
+		<property name="userService" ref="userService"></property>
+	</bean>
+
+	<bean id="userService" class="services.implementation.UserServiceImplementation">
+		<property name="userDAO" ref="userDAO"></property>
+	</bean>
+
+	<bean id="userDAO" class="dao.UserJPADAO">
+	</bean>
+	
+	<bean id="userEntity" class="domain.UserEntity" scope="request"/>
+
+	<bean id="defaultMonitoringNotifier" class="com.exigen.eis.appmon.DefaultMonitoringNotifier" />
+	<bean id="eisMonitoringInterceptor" class="com.exigen.eis.appmon.interceptor.MonitoringInterceptor">
+		<constructor-arg ref="defaultMonitoringNotifier" />
+		<!-- TODO: set the list of notifiers per method name here -->
+		<property name="notifierRegistry">
+			<map></map>
+		</property>
+		<property name="autoStart" value="${application.monitoring.autostart}" />
+	</bean>
+
+	<bean id="applicationMonitorAdmin" class="com.exigen.eis.appmon.MonitoringInterceptorAdmin">
+		<property name="monitoringInterceptor" ref="eisMonitoringInterceptor" />
+	</bean>
+	
+
+</beans>
